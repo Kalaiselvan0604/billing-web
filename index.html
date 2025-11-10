@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea Restaurant - Billing System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-coffee"></i>
+                <h1>Tea Restaurant</h1>
+            </div>
+            <div class="header-info">
+                <div class="header-buttons">
+                    <button class="btn-header" id="toggleAdmin">
+                        <i class="fas fa-cog"></i> Admin
+                    </button>
+                    <button class="btn-header" id="toggleTurnover">
+                        <i class="fas fa-chart-line"></i> Turnover
+                    </button>
+                </div>
+                <div class="date-time" id="dateTime"></div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Menu Section -->
+            <div class="menu-section">
+                <h2><i class="fas fa-utensils"></i> Menu</h2>
+                
+                <!-- Category Tabs -->
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="all">All Items</button>
+                    <button class="tab-btn" data-category="tea">Tea</button>
+                    <button class="tab-btn" data-category="coffee">Coffee</button>
+                    <button class="tab-btn" data-category="vada">Vada</button>
+                    <button class="tab-btn" data-category="juice">Juice</button>
+                    <button class="tab-btn" data-category="icecream">Ice Cream</button>
+                </div>
+
+                <!-- Menu Items -->
+                <div class="menu-items" id="menuItems">
+                    <!-- Items will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Cart & Billing Section -->
+            <div class="cart-section">
+                <div class="cart-header">
+                    <h2><i class="fas fa-shopping-cart"></i> Order Cart</h2>
+                    <button class="clear-btn" id="clearCart">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+
+                <div class="cart-items" id="cartItems">
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (5%):</span>
+                        <span id="tax">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span id="discount">₹0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+                </div>
+
+                <div class="discount-section">
+                    <input type="text" id="discountCode" placeholder="Discount Code (Optional)">
+                    <button id="applyDiscount">Apply</button>
+                </div>
+
+                <div class="customer-info">
+                    <h3>Customer Details</h3>
+                    <input type="text" id="customerName" placeholder="Customer Name">
+                    <input type="text" id="customerPhone" placeholder="Phone Number">
+                    <input type="text" id="tableNumber" placeholder="Table Number (Optional)">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generateBill">
+                        <i class="fas fa-receipt"></i> Generate Bill
+                    </button>
+                    <button class="btn btn-secondary" id="printBill" style="display: none;">
+                        <i class="fas fa-print"></i> Print Bill
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel" style="display: none;">
+            <div class="admin-content">
+                <div class="admin-header">
+                    <h2><i class="fas fa-cog"></i> Admin Panel - Menu Management</h2>
+                    <button class="close-btn" id="closeAdmin">&times;</button>
+                </div>
+                <div class="admin-body">
+                    <div class="admin-form-section">
+                        <h3>Add New Item</h3>
+                        <form id="addItemForm" class="admin-form">
+                            <input type="text" id="addItemName" placeholder="Item Name" required>
+                            <input type="number" id="addItemPrice" placeholder="Price" step="0.01" required>
+                            <select id="addItemCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="tea">Tea</option>
+                                <option value="coffee">Coffee</option>
+                                <option value="vada">Vada</option>
+                                <option value="juice">Juice</option>
+                                <option value="icecream">Ice Cream</option>
+                            </select>
+                            <input type="url" id="addItemImage" placeholder="Image URL" required>
+                            <input type="text" id="addItemDescription" placeholder="Description (Optional)">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </form>
+                    </div>
+                    <div class="admin-list-section">
+                        <h3>Current Menu Items</h3>
+                        <div class="admin-items-list" id="adminItemsList">
+                            <!-- Items will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Turnover List Modal -->
+        <div class="turnover-modal" id="turnoverModal" style="display: none;">
+            <div class="turnover-content">
+                <div class="turnover-header">
+                    <h2><i class="fas fa-chart-line"></i> Monthly Turnover</h2>
+                    <button class="close-btn" id="closeTurnover">&times;</button>
+                </div>
+                <div class="turnover-body">
+                    <div id="turnoverList">
+                        <!-- Turnover data will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Modal -->
+        <div class="invoice-modal" id="invoiceModal">
+            <div class="invoice-content">
+                <div class="invoice-header">
+                    <h2>Invoice</h2>
+                    <button class="close-btn" id="closeInvoice">&times;</button>
+                </div>
+                <div class="invoice-body" id="invoiceBody">
+                    <!-- Invoice content will be generated here -->
+                </div>
+                <div class="invoice-footer">
+                    <button class="btn btn-primary" id="printInvoice">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <button class="btn btn-secondary" id="newOrder">
+                        <i class="fas fa-plus"></i> New Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+

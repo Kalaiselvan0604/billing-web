@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Turnover - Tea Restaurant</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🍵 Tea Restaurant</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Billing</a>
+                <a href="daily-turnover.html" class="nav-link active">Daily Report</a>
+                <a href="monthly-turnover.html" class="nav-link">Monthly Report</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="report-header">
+                <h2>Daily Turnover Report</h2>
+                <div class="report-controls">
+                    <input type="date" id="reportDate" onchange="loadDailyReport()">
+                    <button onclick="downloadDailyPDF()" class="btn btn-primary">Download PDF</button>
+                </div>
+            </div>
+
+            <div class="report-summary">
+                <div class="summary-card">
+                    <h3>Total Revenue</h3>
+                    <p id="dailyTotal">₹0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Bills</h3>
+                    <p id="dailyBillsCount">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Average Bill Amount</h3>
+                    <p id="dailyAverage">₹0.00</p>
+                </div>
+            </div>
+
+            <div class="bills-list" id="billsList">
+                <!-- Bills will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/turnover.js"></script>
+    <script src="js/pdf.js"></script>
+    <script>
+        // Set today's date as default
+        document.getElementById('reportDate').valueAsDate = new Date();
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDailyReport();
+        });
+
+        async function loadDailyReport() {
+            const date = document.getElementById('reportDate').value;
+            await loadDailyTurnover(date);
+        }
+    </script>
+</body>
+</html>
+
